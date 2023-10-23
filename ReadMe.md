@@ -89,6 +89,9 @@
   - th:utext : 특수문자 등 태그를 입력하고 싶을 때(이스케이프 문자)
   - th:each : 반복문
   - th:if : 조건문
+  - th:object : 폼 태그에서 스프링과 바인딩 될 도메인 객체
+  - th:field : 인풋 태그에서 바인딩된 객체의 입력 필드
+    - id, name, value 속성의 설정이 간편하게 진행됨.
   - 리터럴 대체 : "|hello ${user.name}|"
 
 # Spring Security
@@ -106,12 +109,16 @@
   3. Dispatcher Servlet
   4. Controller (url 매핑이 맞는 컨트롤러)
 
+- Password Encoder
+  - 비밀번호를 암호화하여 DB에 저장
 
 - 보안
   - CSRF (Cross Site Request Forgery)
     - 인터넷 사용자가 자신의 의지와 무관하게
     - 공격자가 의도한 행위를 특정 웹사이트에 요청하게 만드는 공격
-    - 보안 토큰 사용하여 방어 CSRF token 
+    - 스프링 시큐리티에서 보안 토큰 사용하여 방어 CSRF token
+      - form 태그에서 post 요청을 받게되면, csrf 필터 작동
+      - 접합한 CSRF token이 있어야, 다음 단계로 진행 가능
       - 적법한 홈페이지 폼에서 요청이 왔다는 것을 확인
   - CORS 
     - 
