@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceTest {
     @Autowired
     MemberService memberService;
-    PasswordEncoder passwordEncoder;
+    @Autowired
+    static PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("회원 가입 테스트")
