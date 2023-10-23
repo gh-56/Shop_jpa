@@ -2,6 +2,11 @@ package com.erser.jpashop.repository;
 
 import com.erser.jpashop.constant.ItemSellStatus;
 import com.erser.jpashop.entity.Item;
+import com.erser.jpashop.entity.QItem;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRepositoryTest {
     @Autowired
     ItemRepository itemRepository;
+    // 영속성 컨텍스트 사용, 스프링 컨테이너 의존성 주
+    @PersistenceContext
+    EntityManager em;
 
     // 가상의 아이템 10개를 만드는 셋업 메소드
     public void createItemList(){
@@ -123,6 +131,26 @@ class ItemRepositoryTest {
     void findByItemDetailJPQLTest() {
         createItemList();
         List<Item> itemList = itemRepository.findByItemDetailJPQL("2");
+        itemList.forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("querydsl 테스트")
+    void queryDslTest() {
+        // given
+        createItemList();
+
+        // when
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+        // Q타입 객체를 사용하여 Querydsl 쿼리 생성 (자동으로 생성)
+        QItem qItem = QItem.item;
+        JPAQuery<Item> query = jpaQueryFactory.selectFrom(qItem)
+                .where(qItem.itemSellStatus.eq(ItemSellStatus.SELL))
+                .where(qItem.itemDetail.like("%상세%"))
+                .orderBy(qItem.price.desc());
+        List<Item> itemList = query.fetch();
+
+        // then
         itemList.forEach(System.out::println);
     }
 }

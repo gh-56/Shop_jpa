@@ -1,0 +1,30 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1>아이템 목록</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>순번</th>
+                <th>상품명</th>
+                <th>설명</th>
+                <th>가격</th>
+                <th>등록일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="itemDto, status: ${itemDtoList}">
+                <td th:text="${status.index}">0</td>
+                <td th:text="${itemDto.itemNm}">기본 상품명</td>
+                <td th:text="${itemDto.itemDetail}">기본 정보</td>
+                <td th:text="${itemDto.price}">0</td>
+                <td th:text="${itemDto.regTime}">0000-00-00</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
