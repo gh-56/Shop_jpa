@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity  // 웹 보안
 @Configuration      // 설정 정보 컴포넌트 등록 선언
@@ -31,9 +32,16 @@ public class SecurityConfig {
                         .failureUrl("/members/login/error") // 실패했을 때 보낼 URL
         );
 
-//        http.authorizeHttpRequests(auth ->
-//                auth.
-//        )
+        // 로그아웃 관련 설정
+        http.logout(
+                logout -> logout
+                        .logoutRequestMatcher(
+                                // Ant 패턴 경로 문법 -> 해당 URL 접속 시 로그아웃됨
+                                new AntPathRequestMatcher("/members/logout"))
+                        // 로그아웃이 성공한 경우 메인 페이지로 리다이렉트
+                        .logoutSuccessUrl("/")
+        );
+
 
 
         // CSRF 토큰 검증 무효화
