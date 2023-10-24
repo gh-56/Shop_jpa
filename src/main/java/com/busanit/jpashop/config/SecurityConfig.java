@@ -42,6 +42,31 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
         );
 
+        // 인가 (authorize)
+        http.authorizeHttpRequests(
+                authorize -> authorize
+                        // Ant 패턴 경로 요청에 대한 매칭 수행
+                        // ** : 모든 파일 및 경로에 대해
+                        // 루트 경로는 모두가 접근 가능
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/"))
+                        .permitAll()
+                        // 정적 파일 css, js, image 등은 모두 접근 가능
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/css/**"))
+                        .permitAll()
+                        // 로그인, 로그아웃, 회원가입 페이지는 모두 접근 가능
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/members/**"))
+                        .permitAll()
+                        // /admin/ 이후의 url은 ADMIN 역할만 접근 가능
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/admin/**"))
+                        .hasAnyRole("ADMIN")
+                        // 그 외 모든 요청은 인증되어야 한다.
+                        .anyRequest().authenticated()
+                );
+
 
 
         // CSRF 토큰 검증 무효화
