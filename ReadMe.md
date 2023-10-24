@@ -121,4 +121,24 @@
       - 접합한 CSRF token이 있어야, 다음 단계로 진행 가능
       - 적법한 홈페이지 폼에서 요청이 왔다는 것을 확인
   - CORS 
-    - 
+  
+- MockMVC
+  - 스프링 프레임워크의 테스트 기능
+  - 모의 웹 애플리케이션 환경 제공
+  - 컨트롤러 테스트
+    - HTTP 요청에 대한 시뮬레이션
+    - 요청 및 응답 검증 : 상태코드, 헤더, 본문 등을 검증할 수 있음
+  - 사용
+    - @AutoConfigureMockMvc 애노테이션
+    - MockMvc 객체
+    - perform 메서드를 사용해서 실행
+    - get, post 등 http 메서드 요청 가능
+    - andExpect 메서드를 통해 테스트 및 검증
+    - andDo : 기타 메서드 사용 가능(print(), log())
+    - isOk : 상태코드 200번, isNotFound : 상태코드 404번
+  - 의존성 추가(security) : spring-security-test 추가
+
+- 스프링 시큐리티 사용자 로그인/로그아웃, 인증 인터페이스
+- UserDetailsService : 데이터베이스에서 회원 정보를 가져오는 역할
+  - loadUserByUsername() : 회원정보 조회, 권한을 갖는 클래스 반환
+  - UserDetails : 회원 정보를 담고 있음. 
