@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity  // 웹 보안
 @Configuration      // 설정 정보 컴포넌트 등록 선언
@@ -26,6 +27,11 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")    // 로그인에 성공했을 때 URL
                         .usernameParameter("email") // 로그인에 사용할 매개변수 username -> email
                         .failureUrl("/members/login/error") // 실패했을 때 보낼 URL
+        );
+        // 로그아웃 관련 설정
+        http.logout(logout -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+                .logoutSuccessUrl("/")
         );
 
 //        http.authorizeHttpRequests(auth -> auth.)
