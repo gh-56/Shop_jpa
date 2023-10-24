@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @EnableWebSecurity  // 웹 보안
 @Configuration      // 설정 정보 컴포넌트 등록 선언
 @RequiredArgsConstructor
@@ -30,16 +32,16 @@ public class SecurityConfig {
         );
         // 로그아웃 관련 설정
         http.logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+                .logoutRequestMatcher(antMatcher("/members/logout"))
                 .logoutSuccessUrl("/")
         );
 
         // 인가(authorize)
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/members/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/admin/**")) // **: 모든 경로
+                .requestMatchers(antMatcher("/")).permitAll()
+                .requestMatchers(antMatcher("/css/**")).permitAll()
+                .requestMatchers(antMatcher("/members/**")).permitAll()
+                .requestMatchers(antMatcher("/admin/**")) // **: 모든 경로
                 .hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
         );
