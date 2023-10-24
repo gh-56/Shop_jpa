@@ -34,6 +34,15 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
         );
 
+        // 인가(authorize)
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/members/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/admin/**")) // **: 모든 경로
+                .hasAnyRole("ADMIN")
+                .anyRequest().authenticated()
+        );
 //        http.authorizeHttpRequests(auth -> auth.)
         return http.build();
     }
