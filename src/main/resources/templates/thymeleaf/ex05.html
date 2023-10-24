@@ -1,0 +1,15 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1>링크</h1>
+    <a th:href="@{/ex01}" href="ex01.html">예제 1번</a>
+    <a th:href="@{http://naver.com/}" href="http://naver.com/">외부 페이지</a>
+    <a th:href="@{/ex06(param1='파라미터1', param2='파라미터2')}" href="06.html">파라미터 전달</a>
+
+
+</body>
+</html>
