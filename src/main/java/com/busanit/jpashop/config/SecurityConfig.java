@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @EnableWebSecurity  // 웹 보안
 @Configuration      // 설정 정보 컴포넌트 등록 선언
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class SecurityConfig {
                 logout -> logout
                         .logoutRequestMatcher(
                                 // Ant 패턴 경로 문법 -> 해당 URL 접속 시 로그아웃됨
-                                new AntPathRequestMatcher("/members/logout"))
+                                antMatcher("/members/logout"))
                         // 로그아웃이 성공한 경우 메인 페이지로 리다이렉트
                         .logoutSuccessUrl("/")
         );
@@ -48,20 +50,19 @@ public class SecurityConfig {
                         // Ant 패턴 경로 요청에 대한 매칭 수행
                         // ** : 모든 파일 및 경로에 대해
                         // 루트 경로는 모두가 접근 가능
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/"))
+                        .requestMatchers(antMatcher("/"))
                         .permitAll()
                         // 정적 파일 css, js, image 등은 모두 접근 가능
                         .requestMatchers(
-                                new AntPathRequestMatcher("/css/**"))
+                                antMatcher("/css/**"))
                         .permitAll()
                         // 로그인, 로그아웃, 회원가입 페이지는 모두 접근 가능
                         .requestMatchers(
-                                new AntPathRequestMatcher("/members/**"))
+                                antMatcher("/members/**"))
                         .permitAll()
                         // /admin/ 이후의 url은 ADMIN 역할만 접근 가능
                         .requestMatchers(
-                                new AntPathRequestMatcher("/admin/**"))
+                                antMatcher("/admin/**"))
                         .hasAnyRole("ADMIN")
                         // 그 외 모든 요청은 인증되어야 한다.
                         .anyRequest().authenticated()
