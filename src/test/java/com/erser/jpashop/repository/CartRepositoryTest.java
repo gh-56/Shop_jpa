@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
+@Transactional  // 해당 클래스 내의 메소드는 테스트 실행 후 롤백 처리
 class CartRepositoryTest {
     @Autowired
     CartRepository cartRepository;
