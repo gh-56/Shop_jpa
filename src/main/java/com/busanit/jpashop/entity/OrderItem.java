@@ -28,12 +28,12 @@ public class OrderItem {
 
     // 다대일 연관관계 매핑
     // : 하나의 주문은 여러 주문상품을 가질 수 있다.
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
     // 다대일 : 하나의 상품은 여러번 주문상품으로 추가될 수 있다.
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
