@@ -19,7 +19,7 @@ public class Cart {
     @Id
     @Column(name = "cart_id")
     @GeneratedValue
-    private Long cartId;
+    private Long id;
 
     // 1대1 단방향 매핑
     @OneToOne
