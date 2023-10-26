@@ -142,3 +142,21 @@
 - UserDetailsService : 데이터베이스에서 회원 정보를 가져오는 역할
   - loadUserByUsername() : 회원정보 조회, 권한을 갖는 클래스 반환
   - UserDetails : 회원 정보를 담고 있음. 
+
+# 연관 관계 매핑
+- 연관 관계 매핑의 종류
+  - 1:1 @OneToOne
+  - 1:N @OneToMany
+  - N:1 @ManyToOne
+  - N:M @ManyToMany
+- 방향
+  - 단방향
+  - 양방향
+- 연관 관계의 주인
+  - 양방향의 경우, 외래키를 어디서 관리하는지. 관리 주체.
+- ERD (Entity - Relation Diagram)
+
+
+
+
+
