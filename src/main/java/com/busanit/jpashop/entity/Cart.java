@@ -22,7 +22,7 @@ public class Cart {
     private Long id;
 
     // 일대일 단방향 매핑
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 

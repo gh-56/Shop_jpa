@@ -32,7 +32,7 @@ public class Order {
     private OrderStatus orderStatus;
 
     // 다대일 관계 : 한명의 회원은 여러 번 주문할 수 있다.
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -42,7 +42,8 @@ public class Order {
     // 부모 엔티티(Order)의 영속성 상태를 자식 엔티티(OrderItem)에 전이하는 Cascade 옵션.
     @OneToMany(mappedBy = "order",
             cascade = CascadeType.ALL,
-           orphanRemoval = true     // 고아 객체 삭제
+            orphanRemoval = true,     // 고아 객체 삭제
+            fetch = FetchType.LAZY
     )
     private List<OrderItem> orderItems = new ArrayList<>();
     // 일대다 : 하나의 주문이 여러개의 주문 상품을 가지므로 List 자료형으로 매핑
