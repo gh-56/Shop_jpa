@@ -138,5 +138,21 @@
   - loadUserByUsername() 메서드 : 회원정보 조회, 권한을 갖는 클래스 반환
   - UserDetails : 회원 정보를 담고 있음.
 
+# 연관관계 매핑
+- 연관관계 매핑의 종류
+  - 다중성
+    - 1:1 @OneToOne
+    - 1:N @OneToMany
+    - N:1 @ManyToOne
+    - N:M @ManyToMany
+  - 방향
+    - 단방향
+    - 양방향
+  - 연관관계의 주인
+    - 양방향의 경우, 외래키를 어디서 관리하는지. 관리 주체.
+- ERD (Entity - Relation Diagram)
+
+
+
 
 
