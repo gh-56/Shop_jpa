@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name="item")     // 테이블을 다른 이름 설정 가능
 @Entity
@@ -35,4 +36,19 @@ public class Item {
 
     private LocalDateTime regTime;      // 등록시간
     private LocalDateTime updateTime;   // 수정시간
+    /*
+    // 다대다 관계 예시
+    // 연결 테이블에 다른 컬럼을 추가할 수가 없다. => 실무에서 사용하지 않음
+    // 다대일 관계로 연결된 테이블용 엔티티를 따로 생성해서 매핑하는 것이 좋다.
+    @ManyToMany
+    @JoinTable(
+            name = "member_item",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private List<Member> members;
+    */
+
+
+
 }
