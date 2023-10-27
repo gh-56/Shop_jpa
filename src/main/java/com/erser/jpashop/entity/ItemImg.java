@@ -37,6 +37,12 @@ public class ItemImg extends BaseEntity{
     @JoinColumn(name = "item_id")
     private Item item;
 
+    // 이미지의 파일명과 경로를 업데이트 해주는 메서
+    public void updateItemImg(String oriImgName, String imgName, String imgUrl) {
+        this.oriImgName = oriImgName;
+        this.imgName = imgName;
+        this.imgUrl = imgUrl;
+    }
 }
 
 
