@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity @Getter @Setter
-public class CartItem {
+public class CartItem extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "cart_item_id")

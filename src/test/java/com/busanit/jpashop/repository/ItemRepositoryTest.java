@@ -38,8 +38,6 @@ class ItemRepositoryTest {
             item.setStockNumber(100 + i);
             item.setItemDetail("상세정보" + i);
             item.setItemSellStatus(ItemSellStatus.SELL);
-            item.setRegTime(LocalDateTime.now());
-            item.setUpdateTime(LocalDateTime.now());
             itemRepository.save(item);
         }
     }

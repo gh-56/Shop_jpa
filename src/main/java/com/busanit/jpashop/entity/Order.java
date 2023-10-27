@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")  // SQL 문 order by 예약어로 order 사용 불가
 @Getter @Setter
-public class Order {
+public class Order extends BaseEntity {
 
     // 주문 id
     @Id @GeneratedValue

@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name="item")     // 테이블을 다른 이름 설정 가능
 @Entity
 @Getter @Setter @ToString
-public class Item {
+public class Item extends BaseEntity {
     @Id
     @Column(name="item_id")     // 컬럼명 다른 이름 설정 가능
     @GeneratedValue(strategy = GenerationType.AUTO)     // 자동생성 전략 선택 가능
@@ -34,8 +34,9 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;  // 판매상태
 
-    private LocalDateTime regTime;      // 등록시간
-    private LocalDateTime updateTime;   // 수정시간
+    // Auditing 추가로 삭제
+//    private LocalDateTime regTime;      // 등록시간
+//    private LocalDateTime updateTime;   // 수정시간
     /*
     // 다대다 관계 예시
     // 연결 테이블에 다른 컬럼을 추가할 수가 없다. => 실무에서 사용하지 않음
