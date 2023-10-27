@@ -13,7 +13,7 @@ import lombok.ToString;
 @Table(name = "cart")
 @Getter @Setter @ToString
 @NoArgsConstructor
-public class Cart {
+public class Cart extends BaseEntity{
 
     // 장바구니id
     @Id

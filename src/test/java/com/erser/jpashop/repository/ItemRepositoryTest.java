@@ -13,11 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties") // 해당 테스트 실행시 환경 설정 소스 우선순위를 변경한다.
@@ -37,8 +36,6 @@ class ItemRepositoryTest {
             item.setStockNumber(100 + i);
             item.setItemDetail("상세정보" + i);
             item.setItemSellStatus(ItemSellStatus.SELL);
-            item.setRegTime(LocalDateTime.now());
-            item.setUpdateTime(LocalDateTime.now());
             itemRepository.save(item);
         }
     }

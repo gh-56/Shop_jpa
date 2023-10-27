@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @EntityListeners(value={AuditingEntityListener.class})
 @MappedSuperclass   // 공통 매핑 정보가 필요할 때 사용하는 애노테이션, 상속받는 자식 클래스에 매핑 정보 제공
-public class BaseTimeEntity {
+public abstract class BaseTimeEntity {
     // 등록일
     @CreatedDate
     @Column(updatable = false)

@@ -6,12 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Table(name="item") // 테이블을 다른 이름 설정 가능
 @Entity
 @Getter @Setter @ToString
-public class Item {
+public class Item extends BaseEntity{
     @Id
     @Column(name="item_id")     // 컬럼명 다른 이름 설정 가능
     @GeneratedValue(strategy = GenerationType.AUTO) // 자동 생성
@@ -27,6 +25,8 @@ public class Item {
     private String itemDetail;  // 상품 상세
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus; // 판매 상태
-    private LocalDateTime regTime;  // 등록 시간
-    private LocalDateTime updateTime; // 수정 시간
+
+    // Auditing 추가 했기 때문에 주석 처리함
+//    private LocalDateTime regTime;  // 등록 시간
+//    private LocalDateTime updateTime; // 수정 시간
 }

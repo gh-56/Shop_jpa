@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "order_item")
 @Getter @Setter
-public class OrderItem {
+public class OrderItem extends BaseEntity{
 
     // 주문상품id
     @Id @GeneratedValue
