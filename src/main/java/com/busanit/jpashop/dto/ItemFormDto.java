@@ -1,10 +1,12 @@
 package com.busanit.jpashop.dto;
 
 import com.busanit.jpashop.constant.ItemSellStatus;
+import com.busanit.jpashop.entity.Item;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,11 @@ public class ItemFormDto {
     private List<Long> itemImgIds = new ArrayList<>();
 
 
+    private static ModelMapper modelMapper = new ModelMapper();
 
-
+    // 생성 메서드
+    // 모델 매퍼 사용하여 Data를 두 객체 (원본 -> 목적)간에 매핑하여 반환
+    public Item createItem() {
+        return modelMapper.map(this, Item.class);
+    }
 }

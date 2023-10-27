@@ -41,6 +41,9 @@ dependencies {
 	// 타임리프 스프링 시큐리티 관련 추가 라이브러리
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
+	// 모델 매핑을 도와주는 라이브러리 modelmapper
+	implementation 'org.modelmapper:modelmapper:3.1.0'
+
 	// Web MVC, REST API, 웹 서버(apache tomcat)
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// 롬복 : Annotation으로 코드를 편하게
