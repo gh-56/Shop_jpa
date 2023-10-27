@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter @Setter @ToString
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id @Column(name = "member_id")
     @GeneratedValue
     private Long id;
@@ -28,6 +28,7 @@ public class Member {
     // 열거형 타입, 순서가 바뀌어도 내용이 변경되지 않게 String 타입
     @Enumerated(EnumType.STRING)
     private Role role;
+
 
     // 생성 메서드 dto -> 엔티티
     public static Member createMember(MemberDto memberDto,
