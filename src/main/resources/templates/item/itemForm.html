@@ -4,10 +4,24 @@
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layout/layout1}"
 >
+  <!-- 사용자 CSS 조각 -->
+  <th:block layout:fragment="css">
+    <style>
+      .fieldError {
+        color: red;
+      }
+    </style>
+  </th:block>
+
   <div layout:fragment="content">
     <h1>상품 등록 페이지</h1>
 
-    <form action="" method="post" th:object="${itemFormDto}">
+    <form
+      action="/admin/item/new"
+      method="post"
+      th:object="${itemFormDto}"
+      enctype="multipart/form-data"
+    >
       <input type="hidden" th:field="*{id}" />
       <!-- 상품등록상태 -->
       <div class="form-group">
@@ -29,6 +43,14 @@
           placeholder="상품명을 입력해주세요."
         />
       </div>
+      <!-- 유효성 검증 에러메시지 -->
+      <p
+        th:if="${#fields.hasErrors('itemNm')}"
+        th:errors="*{itemNm}"
+        class="fieldError"
+      >
+        에러메시지
+      </p>
 
       <!-- 가격 -->
       <div class="input-group mb-3">
@@ -42,6 +64,14 @@
           placeholder="상품가격 입력해주세요."
         />
       </div>
+      <!-- 유효성 검증 에러메시지 -->
+      <p
+        th:if="${#fields.hasErrors('price')}"
+        th:errors="*{price}"
+        class="fieldError"
+      >
+        에러메시지
+      </p>
 
       <!-- 재고 -->
       <div class="input-group mb-3">
@@ -55,6 +85,14 @@
           placeholder="상품의 재고를 입력해주세요."
         />
       </div>
+      <!-- 유효성 검증 에러메시지 -->
+      <p
+        th:if="${#fields.hasErrors('stockNumber')}"
+        th:errors="*{stockNumber}"
+        class="fieldError"
+      >
+        에러메시지
+      </p>
 
       <!-- 상품상세 -->
       <div class="input-group mb-3">
@@ -67,6 +105,24 @@
           class="form-control"
         ></textarea>
       </div>
+      <!-- 유효성 검증 에러메시지 -->
+      <p
+        th:if="${#fields.hasErrors('itemDetail')}"
+        th:errors="*{itemDetail}"
+        class="fieldError"
+      >
+        에러메시지
+      </p>
+
+      <!-- 상품 이미지파일 5개 -->
+      <div th:each="num: ${#numbers.sequence(1,5)}">
+        <div class="form-group">
+          <input type="file" name="itemImgFile" />
+        </div>
+      </div>
+
+      <!-- 제출 버튼 -->
+      <button type="submit" class="btn btn-primary">저장</button>
 
       <!-- CSRF 토큰 -->
       <input
