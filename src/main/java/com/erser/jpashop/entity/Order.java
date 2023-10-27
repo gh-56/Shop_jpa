@@ -38,7 +38,7 @@ public class Order {
     // 일대다 관계
     // 외래키를 가지고 있는 연관관계의 주인 엔티티를 참조하는 목록을 필드로 갖는다 (연관관계의 주인이 아님)
     // 연관관계의 주인을 mappedBy로 설정
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     // 일대다 : 하나의 주문이 여러개의 주문 상품을 가지므로 List 자료형으로 매핑

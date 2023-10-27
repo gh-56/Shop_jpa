@@ -48,9 +48,9 @@ class CartRepositoryTest {
         em.clear();     // 영속성 객체 비우기
 
         // when
-        Cart findCart = cartRepository.findById(cart.getCartId()).orElse(null);
+        Cart findCart = cartRepository.findById(cart.getId()).orElse(null);
 
         // then
-        Assertions.assertThat(findCart.getCartId()).isEqualTo(member.getId());
+        Assertions.assertThat(findCart.getId()).isEqualTo(member.getId());
     }
 }
