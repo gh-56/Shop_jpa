@@ -8,6 +8,12 @@
   <th:block layout:fragment="script">
     <script th:inline="javascript">
       $(document).ready(function () {
+
+        const errorMessage = [[ ${errorMessage} ]]  // 서버에서 전달받은 에러메시지 변수 -> thymeleaf 문법으로 받아 js 변수로 전달
+        if (errorMessage) {
+          alert(errorMessage)
+        }
+
         fileUploadEvent();
       });
 
