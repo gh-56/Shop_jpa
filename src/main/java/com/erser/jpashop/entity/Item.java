@@ -1,6 +1,7 @@
 package com.erser.jpashop.entity;
 
 import com.erser.jpashop.constant.ItemSellStatus;
+import com.erser.jpashop.dto.ItemFormDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,15 @@ public class Item extends BaseEntity{
     private String itemDetail;  // 상품 상세
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus; // 판매 상태
+
+    // 영속성 컨택스트 변경감지기능 활용 : 트랜잭션 종료시 업데이트 쿼리 수행
+    public void updateItem(ItemFormDto itemFormDto) {
+        this.itemNm = itemFormDto.getItemNm();
+        this.price = itemFormDto.getPrice();
+        this.stockNumber = itemFormDto.getStockNumber();
+        this.itemDetail = itemFormDto.getItemDetail();
+        this.itemSellStatus = itemFormDto.getItemSellStatus();
+    }
 
     // Auditing 추가 했기 때문에 주석 처리함
 //    private LocalDateTime regTime;  // 등록 시간

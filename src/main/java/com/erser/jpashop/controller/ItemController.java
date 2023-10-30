@@ -21,17 +21,18 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+
     @GetMapping("admin/item/new")
-    public String itemForm(Model model){
+    public String itemForm(Model model) {
         model.addAttribute("itemFormDto", new ItemFormDto());
 //        model.addAttribute("itemImgDto", new ItemImgDto());
         return "/item/itemForm";
     }
 
     @PostMapping("admin/item/new")
-    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, @RequestParam("itemImgFile") List<MultipartFile> itemImgFiles){
+    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, @RequestParam("itemImgFile") List<MultipartFile> itemImgFiles) {
         // 유효성 검증 : 통과하지 못한 경우 폼으로
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "/item/itemForm";
         }
         // 아이템 DB 저장
@@ -41,17 +42,26 @@ public class ItemController {
     }
 
     @GetMapping("/admin/item/{itemId}")
-    public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
-        try{
+    public String itemDtl(@PathVariable("itemId") Long itemId, Model model) {
+        try {
             // 아이템 서비스에 위임하여 dto 리턴
             ItemFormDto itemFormDto = itemService.getItemDto(itemId);
             // 엔티티가 존재할 경우 dto를 모델에 담아 뷰로 전달
             model.addAttribute("itemFormDto", itemFormDto);
             // 경로변수(itemId)에 해당하는 엔티티가 없을 경우
-        }catch(EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             // 상품등록 페이지로 리다이렉트
             return "redirect:/admin/item/new";
         }
         return "item/itemForm";
+    }
+
+    @PostMapping("/admin/item/{itemId}")
+    public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
+                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+                             Model model) {
+        // 서비스 계층에 수정 비즈니스 로직 위임
+        itemService.updateItem(itemFormDto, itemImgFileList);
+        return "redirect:/";
     }
 }

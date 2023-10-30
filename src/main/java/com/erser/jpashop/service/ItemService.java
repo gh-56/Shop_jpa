@@ -59,4 +59,14 @@ public class ItemService {
         itemFormDto.setItemImgDtoList(itemImgDtoList);
         return itemFormDto;
     }
+
+    public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) {
+        Item item = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
+        // 변경 감지 기능을 사용 :
+        // 리포지터리에 저장하는 로직을 호출하지 않고,
+        // 영속 상태인 데이터를 변경하게 될 경우,
+        // 트랜잭션이 종료될 때, 변경 감지 기능이 작동
+        item.updateItem(itemFormDto);
+        return item.getId();
+    }
 }
