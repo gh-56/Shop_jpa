@@ -4,6 +4,37 @@
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layout/layout1}"
 >
+  <!-- 사용자 JS 조각-->
+  <th:block layout:fragment="script">
+    <script th:inline="javascript">
+      $(document).ready(function () {
+        fileUploadEvent();
+      });
+      function fileUploadEvent() {
+        $('.custom-file-input').on('change', function () {
+          const fileName = $(this).val().split('\\').pop(); // 파일명 꺼내기
+          console.log(fileName.lastIndexOf('.') + 1);
+          let fileExt = fileName.substring(fileName.lastIndexOf('.') + 1); // 파일 확장자 꺼내기
+          console.log('파일명: ' + fileName);
+          console.log('파일 확장자: ' + fileExt);
+          fileExt = fileExt.toLowerCase(); // 소문자 변환
+          if (
+            fileExt !== 'jpg' &&
+            fileExt !== 'jpeg' &&
+            fileExt !== 'gif' &&
+            fileExt !== 'png' &&
+            fileExt !== 'bmp'
+          ) {
+            alert('이미지 파일만 등록가능합니다.');
+            return;
+          }
+          // 파일 이름 넣기
+          $(this).siblings('.custom-file-label').html(fileName);
+        });
+      }
+    </script>
+  </th:block>
+  <!-- 사용자 CSS 조각-->
   <th:block layout:fragment="css">
     <style>
       .fieldError {
@@ -104,10 +135,23 @@
       >
         에러메시지
       </p>
-      <!-- 상품 이미지파일-->
+      <!-- 상품 이미지파일 5개 -->
       <div th:each="num: ${#numbers.sequence(1,5)}">
         <div class="form-group">
-          <input type="file" name="itemImgFile" />
+          <div class="custom-file">
+            <input
+              type="file"
+              class="custom-file-input"
+              name="itemImgFile"
+              accept=".jpg, .jpeg, .png, .gif, .bmp"
+            />
+            <label
+              class="custom-file-label"
+              th:text="상품이미지+ ${num}"
+              data-browse="업로드"
+              >Choose file</label
+            >
+          </div>
         </div>
       </div>
       <!-- 제출 버튼 -->
