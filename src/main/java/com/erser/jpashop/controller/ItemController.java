@@ -1,11 +1,14 @@
 package com.erser.jpashop.controller;
 
 import com.erser.jpashop.dto.ItemFormDto;
+import com.erser.jpashop.dto.ItemSearchDto;
 import com.erser.jpashop.entity.Item;
 import com.erser.jpashop.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -87,7 +90,10 @@ public class ItemController {
     }
 
     @GetMapping("/admin/items")
-    public String itemManage(Model model){
+    public String itemManage(Model model, ItemSearchDto itemSearchDto){
+        Pageable pageable = PageRequest.of(0, 3);
+        itemService.getAdminItemPage(itemSearchDto , pageable);
+
         // 서비스 계층에서 item 가져오기
         List<Item> items = itemService.getItemList();
         model.addAttribute("items", items);
