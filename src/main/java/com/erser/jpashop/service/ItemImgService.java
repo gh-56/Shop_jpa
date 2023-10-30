@@ -41,13 +41,21 @@ public class ItemImgService {
         if(!itemImgFile.isEmpty()){
             ItemImg itemImg = itemImgRepository.findById(itemImgId).orElseThrow(EntityNotFoundException::new);
 
+            // 기존 이미지 삭제
+            if (StringUtils.hasText(itemImg.getImgName())){
+                fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName());
+
+            }
+
+            // 원본 이름, 변경이름(파일 업로드 수행) 경로
             String oriImgName = itemImgFile.getOriginalFilename();
             // 파일 업로드 - 리턴 UUID 파일이름
             String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile);
             // 경로
             String imgUrl = "/images/item/" + imgName;
+
+            // 영속성 객체 변경 감지 이미지 변경이 발생
             itemImg.updateItemImg(oriImgName, imgName, imgUrl);
-            // 변경 감지 이미지 변경이 발생
         }
 
     }

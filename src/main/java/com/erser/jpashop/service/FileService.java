@@ -3,6 +3,7 @@ package com.erser.jpashop.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
@@ -30,5 +31,13 @@ public class FileService {
         }
 
         return savedFileName;
+    }
+
+    // 전달받은 파일 삭제
+    public void deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 }
