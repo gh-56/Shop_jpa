@@ -1,6 +1,7 @@
 package com.erser.jpashop.controller;
 
 import com.erser.jpashop.dto.ItemFormDto;
+import com.erser.jpashop.entity.Item;
 import com.erser.jpashop.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -30,11 +31,20 @@ public class ItemController {
     }
 
     @PostMapping("admin/item/new")
-    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, @RequestParam("itemImgFile") List<MultipartFile> itemImgFiles) {
+    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
+                          @RequestParam("itemImgFile") List<MultipartFile> itemImgFiles,
+                          Model model) {
         // 유효성 검증 : 통과하지 못한 경우 폼으로
         if (bindingResult.hasErrors()) {
             return "/item/itemForm";
         }
+
+        // 상품 이미지 파일 1개를 필수적으로 넣는 유효성 검증 추가
+        if(itemImgFiles.get(0).isEmpty()){
+            model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력값입니다.");
+            return "/item/itemForm";
+        }
+
         // 아이템 DB 저장
         itemService.saveItem(itemFormDto, itemImgFiles);
         // 리다이렉트
@@ -60,8 +70,28 @@ public class ItemController {
     public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
                              @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
                              Model model) {
+        // 유효성 검증 : 통과하지 못한 경우 폼으로
+        if (bindingResult.hasErrors()) {
+            return "/item/itemForm";
+        }
+
+        // 상품 이미지 파일 1개를 필수적으로 넣는 유효성 검증 추가
+        if(itemImgFileList.get(0).isEmpty()){
+            model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력값입니다.");
+            return "/item/itemForm";
+        }
+
         // 서비스 계층에 수정 비즈니스 로직 위임
         itemService.updateItem(itemFormDto, itemImgFileList);
         return "redirect:/";
     }
+
+    @GetMapping("/admin/items")
+    public String itemManage(Model model){
+        // 서비스 계층에서 item 가져오기
+        List<Item> items = itemService.getItemList();
+        model.addAttribute("items", items);
+        return "item/itemMng";
+    }
+
 }

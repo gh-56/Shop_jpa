@@ -76,4 +76,9 @@ public class ItemService {
         }
         return item.getId();
     }
+
+    public List<Item> getItemList() {
+        List<Item> all = itemRepository.findAll();
+        return all;
+    }
 }
