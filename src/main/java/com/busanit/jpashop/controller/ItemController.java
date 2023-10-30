@@ -2,6 +2,7 @@ package com.busanit.jpashop.controller;
 
 import com.busanit.jpashop.dto.ItemDto;
 import com.busanit.jpashop.dto.ItemFormDto;
+import com.busanit.jpashop.entity.Item;
 import com.busanit.jpashop.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -80,4 +81,17 @@ public class ItemController {
         
         return "redirect:/";
     }
+
+    @GetMapping("/admin/items")
+    public String itemManage(Model model) {
+        // 서비스 계층에서 item 가져오기
+        List<Item> items = itemService.getItemList();
+        model.addAttribute("items", items);
+        return "item/itemMng";
+    }
+
+
+
+
+
 }

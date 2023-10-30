@@ -84,9 +84,11 @@ public class ItemService {
             itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
         }
 
-
-
-
         return item.getId();
+    }
+
+    public List<Item> getItemList() {
+        List<Item> all = itemRepository.findAll();
+        return all;
     }
 }

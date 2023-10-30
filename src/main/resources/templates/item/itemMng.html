@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout1}"
+>
+  <div layout:fragment="content">
+    <!-- 데이터 -->
+    <table class="table">
+      <thead>
+        <tr>
+          <td>아이디</td>
+          <td>상품명</td>
+          <td>상태</td>
+          <td>등록자</td>
+          <td>등록일</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="item, status: ${items}">
+          <td th:text="${item.id}"></td>
+          <td th:text="${item.itemNm}"></td>
+          <td th:text="${item.itemSellStatus}"></td>
+          <td th:text="${item.createdBy}"></td>
+          <td th:text="${item.regTime}"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 페이지네이션 -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+
+    <!-- 쿼리 (질의, 검색) -->
+    <div class="form-inline justify-content-center">
+      <select name="searchDateType" id="searchDateType">
+        <option value="all">전체기간</option>
+        <option value="1d">1일</option>
+        <option value="1w">1주</option>
+        <option value="1m">1달</option>
+        <option value="6m">6개월</option>
+      </select>
+      <select name="searchSellStatus" id="searchSellStatus">
+        <option value="">판매상태(전체)</option>
+        <option value="SELL">판매</option>
+        <option value="SOLD_OUT">품절</option>
+      </select>
+      <select name="searchBy" id="searchBy">
+        <option value="itemNm">상품명</option>
+        <option value="createdBy">등록자</option>
+      </select>
+      <input
+        type="text"
+        name="searchQuery"
+        placeholder="검색어를 입력해주세요."
+      />
+      <button id="serachBtn" class="btn btn-primary">검색</button>
+    </div>
+  </div>
+</html>
