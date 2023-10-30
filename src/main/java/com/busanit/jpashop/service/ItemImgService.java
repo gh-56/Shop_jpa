@@ -2,6 +2,7 @@ package com.busanit.jpashop.service;
 
 import com.busanit.jpashop.entity.ItemImg;
 import com.busanit.jpashop.repository.ItemImgRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,20 @@ public class ItemImgService {
         // 상품 이미지 정보 저장
         itemImg.updateItemImg(oriImgName, imgName, imgUrl);
         itemImgRepository.save(itemImg);
+    }
+
+    public void updateItemImg(Long itemImgId, MultipartFile itemImgFile) {
+        // 예외처리 : 파일 입력 태그가 수정이 된 경우만 로직을 수행
+        if(!itemImgFile.isEmpty()) {
+            ItemImg itemImg = itemImgRepository.findById(itemImgId).orElseThrow(EntityNotFoundException::new);
+            String oriImgName = itemImgFile.getOriginalFilename();
+            // 파일 업로드 - 리턴 UUID 파일이름
+            String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile);
+            // 경로
+            String imgUrl = "/images/item/" + imgName;
+            // 변경 감지 이미지 변경이 발생
+            itemImg.updateItemImg(oriImgName, imgName, imgUrl);
+            
+        }
     }
 }

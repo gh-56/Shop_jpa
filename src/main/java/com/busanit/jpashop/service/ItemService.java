@@ -77,6 +77,16 @@ public class ItemService {
         // 트랜잭션이 종료될 때, 변경 감지 기능이 작동
         item.updateItem(itemFormDto);
 
+        // 상품 이미지 조회
+        List<Long> itemImgIds = itemFormDto.getItemImgIds();
+        for (int i = 0; i < itemImgFileList.size(); i++) {
+            // 상품 파일 서비스 계층에 수정 위임 : id, file
+            itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
+        }
+
+
+
+
         return item.getId();
     }
 }
