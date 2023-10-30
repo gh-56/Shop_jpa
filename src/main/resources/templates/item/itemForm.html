@@ -46,7 +46,6 @@
     <h1>상품 등록 페이지</h1>
 
     <form
-      action="/admin/item/new"
       method="post"
       th:object="${itemFormDto}"
       enctype="multipart/form-data"
@@ -135,28 +134,77 @@
       >
         에러메시지
       </p>
-      <!-- 상품 이미지파일 5개 -->
-      <div th:each="num: ${#numbers.sequence(1,5)}">
-        <div class="form-group">
-          <div class="custom-file">
-            <input
-              type="file"
-              class="custom-file-input"
-              name="itemImgFile"
-              accept=".jpg, .jpeg, .png, .gif, .bmp"
-            />
-            <label
-              class="custom-file-label"
-              th:text="상품이미지+ ${num}"
-              data-browse="업로드"
-              >Choose file</label
-            >
+      <!-- 상품 이미지파일 5개 : 상품등록 -->
+      <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
+        <div th:each="num: ${#numbers.sequence(1,5)}">
+          <div class="form-group">
+            <div class="custom-file">
+              <input
+                type="file"
+                class="custom-file-input"
+                name="itemImgFile"
+                accept=".jpg, .jpeg, .png, .gif, .bmp"
+              />
+              <label
+                class="custom-file-label"
+                th:text="상품이미지+ ${num}"
+                data-browse="업로드"
+                >Choose file</label
+              >
+            </div>
           </div>
         </div>
       </div>
-      <!-- 제출 버튼 -->
-      <button type="submit" class="btn btn-primary">저장</button>
 
+      <!-- 상품 이미지파일 5개 : 상품 수정인 경우 -->
+      <div th:unless="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
+        <div th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
+          <div class="form-group">
+            <div class="custom-file">
+              <input
+                type="file"
+                class="custom-file-input"
+                name="itemImgFile"
+                accept=".jpg, .jpeg, .png, .gif, .bmp"
+              />
+              <label
+                class="custom-file-label"
+                th:text="${not #strings.isEmpty(itemImgDto.oriImgName)} 
+                ? ${itemImgDto.oriImgName}
+                : '상품이미지'+ ${status.index+1}
+                "
+                data-browse="업로드"
+                >Choose file</label
+              >
+              <!-- 상품 파일 id -->
+              <input
+                type="hidden"
+                name="itemImgIds"
+                th:value="${itemImgDto.id}"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 제출 버튼 : dto가 비었을 때 -> 생성, 존재할때 -> 수정 -->
+      <div th:if="${#strings.isEmpty(itemFormDto.id)}">
+        <button
+          th:formaction="@{/admin/item/new}"
+          type="submit"
+          class="btn btn-primary"
+        >
+          저장
+        </button>
+      </div>
+      <div th:unless="${#strings.isEmpty(itemFormDto.id)}">
+        <button
+          th:formaction="@{'/admin/item/' + ${itemFormDto.id}}"
+          type="submit"
+          class="btn btn-primary"
+        >
+          수정
+        </button>
+      </div>
       <!-- CSRF 토큰 -->
       <input
         type="hidden"
