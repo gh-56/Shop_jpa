@@ -36,6 +36,11 @@ public class ItemFormDto {
 
     private static ModelMapper modelMapper = new ModelMapper();
 
+    // Item(엔티티) => ItemFormDto
+    public static ItemFormDto of(Item item) {
+        return modelMapper.map(item, ItemFormDto.class);
+    }
+
     // 생성 메서드
     // 모델 매퍼 사용하여 Data를 두 객체 (원본 -> 목적)간에 매핑하여 반환
     public Item createItem() {
