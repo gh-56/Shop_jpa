@@ -59,4 +59,13 @@ public class ItemController {
 
         return "item/itemForm";
     }
+
+    @PostMapping("/admin/item/{itemId}")
+    public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model ) {
+
+        // 서비스 계층에 수정 비즈니스 로직 위임
+        itemService.updateItem(itemFormDto, itemImgFileList);
+        
+        return "redirect:/";
+    }
 }
