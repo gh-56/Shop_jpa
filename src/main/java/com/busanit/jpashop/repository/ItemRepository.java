@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom {
 
     /*스프링 공식문서 : 쿼리메소드
     https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods */

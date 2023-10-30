@@ -2,12 +2,15 @@ package com.busanit.jpashop.service;
 
 import com.busanit.jpashop.dto.ItemFormDto;
 import com.busanit.jpashop.dto.ItemImgDto;
+import com.busanit.jpashop.dto.ItemSearchDto;
 import com.busanit.jpashop.entity.Item;
 import com.busanit.jpashop.entity.ItemImg;
 import com.busanit.jpashop.repository.ItemImgRepository;
 import com.busanit.jpashop.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,5 +93,9 @@ public class ItemService {
     public List<Item> getItemList() {
         List<Item> all = itemRepository.findAll();
         return all;
+    }
+
+    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 }

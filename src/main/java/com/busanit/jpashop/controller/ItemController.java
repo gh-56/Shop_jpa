@@ -2,11 +2,15 @@ package com.busanit.jpashop.controller;
 
 import com.busanit.jpashop.dto.ItemDto;
 import com.busanit.jpashop.dto.ItemFormDto;
+import com.busanit.jpashop.dto.ItemSearchDto;
 import com.busanit.jpashop.entity.Item;
 import com.busanit.jpashop.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -83,9 +87,12 @@ public class ItemController {
     }
 
     @GetMapping("/admin/items")
-    public String itemManage(Model model) {
-        // 서비스 계층에서 item 가져오기
-        List<Item> items = itemService.getItemList();
+    public String itemManage(Model model, ItemSearchDto itemSearchDto) {
+        Pageable pageable = PageRequest.of(0, 3);
+        // 서비스 계층에서 item 페이지 가져오기
+        Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
+
+
         model.addAttribute("items", items);
         return "item/itemMng";
     }
