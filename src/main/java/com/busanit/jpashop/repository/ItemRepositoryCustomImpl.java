@@ -2,8 +2,11 @@ package com.busanit.jpashop.repository;
 
 import com.busanit.jpashop.constant.ItemSellStatus;
 import com.busanit.jpashop.dto.ItemSearchDto;
+import com.busanit.jpashop.dto.MainItemDto;
+import com.busanit.jpashop.dto.QMainItemDto;
 import com.busanit.jpashop.entity.Item;
 import com.busanit.jpashop.entity.QItem;
+import com.busanit.jpashop.entity.QItemImg;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -16,6 +19,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.busanit.jpashop.entity.QItem.item;
+import static com.busanit.jpashop.entity.QItemImg.itemImg;
+
 
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
@@ -82,7 +87,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
         LocalDateTime dateTime = LocalDateTime.now();
 
         // 만약 날짜타입이 전체 혹은 비어있다면,
-        if (StringUtils.equals("all", searchDateType) 
+        if (StringUtils.equals("all", searchDateType)
                 || searchDateType == null) { // "all".equals(searchDateType)
             return null;        // null을 리턴하면 where조건을 생략한다.
             // 만약 날짜 타입이 하루면 => 하루 전으로 설정
@@ -97,4 +102,52 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
         }
         return item.regTime.after(dateTime);
     }
+
+
+    @Override
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+
+        // QItemImg itemImg = QItemImg.itemImg; => 정적 임포트 추가
+
+        // 필요한 컬럼(DTO) 쿼리 프로젝션
+        List<MainItemDto> content = queryFactory
+                .select(new QMainItemDto(
+                        item.id,
+                        item.itemNm,
+                        item.itemDetail,
+                        itemImg.imgUrl,
+                        item.price)
+                )
+                .from(itemImg)
+                .join(itemImg.item, item)       // 테이블 조인 inner join
+                .where(itemImg.repImgYn.eq("Y")) // 대표 상품이미지만 선택해서 불러오기
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .orderBy(item.id.desc())  // 최신순 정렬
+                .offset(pageable.getOffset())   // 페이징
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // 전체 쿼리 개수 가져오기
+        // select count(*) from item
+        Long total = queryFactory
+                .select(itemImg.count())
+                .from(itemImg)
+                .join(itemImg.item, item)
+                .where(itemImg.repImgYn.eq("Y"))
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    // 검색어가 null인 경우 조건절 생략, 존재하는경우 검색어가 포함되는 상품 조건절 반환
+    private Predicate itemNmLike(String searchQuery) {
+        if (StringUtils.isEmpty(searchQuery)) {
+            return null;
+        } else {
+            return item.itemNm.like("%"+searchQuery+"%");
+        }
+    }
+
+
 }

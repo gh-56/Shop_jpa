@@ -3,6 +3,7 @@ package com.busanit.jpashop.service;
 import com.busanit.jpashop.dto.ItemFormDto;
 import com.busanit.jpashop.dto.ItemImgDto;
 import com.busanit.jpashop.dto.ItemSearchDto;
+import com.busanit.jpashop.dto.MainItemDto;
 import com.busanit.jpashop.entity.Item;
 import com.busanit.jpashop.entity.ItemImg;
 import com.busanit.jpashop.repository.ItemImgRepository;
@@ -97,5 +98,9 @@ public class ItemService {
 
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 }

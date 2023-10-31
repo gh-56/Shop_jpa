@@ -50,19 +50,17 @@ public class SecurityConfig {
                         // Ant 패턴 경로 요청에 대한 매칭 수행
                         // ** : 모든 파일 및 경로에 대해
                         // 루트 경로는 모두가 접근 가능
-                        .requestMatchers(antMatcher("/"))
-                        .permitAll()
+                        .requestMatchers(antMatcher("/")).permitAll()
                         // 정적 파일 css, js, image 등은 모두 접근 가능
-                        .requestMatchers(
-                                antMatcher("/css/**"))
-                        .permitAll()
+                        .requestMatchers(antMatcher("/css/**")).permitAll()
                         // 로그인, 로그아웃, 회원가입 페이지는 모두 접근 가능
-                        .requestMatchers(
-                                antMatcher("/members/**"))
-                        .permitAll()
+                        .requestMatchers(antMatcher("/members/**")).permitAll()
+                        // 이미지 파일은 모두 접근 가능
+                        .requestMatchers(antMatcher("/images/**")).permitAll()
+                        // 상품 경로는 모두 접근 가능
+                        .requestMatchers(antMatcher("/item/**")).permitAll()
                         // /admin/ 이후의 url은 ADMIN 역할만 접근 가능
-                        .requestMatchers(
-                                antMatcher("/admin/**"))
+                        .requestMatchers(antMatcher("/admin/**"))
                         .hasAnyRole("ADMIN")
                         // 그 외 모든 요청은 인증되어야 한다.
                         .anyRequest().authenticated()
