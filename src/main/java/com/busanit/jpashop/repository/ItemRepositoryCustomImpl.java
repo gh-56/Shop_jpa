@@ -81,8 +81,9 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     private Predicate regDateAfter(String searchDateType) {
         LocalDateTime dateTime = LocalDateTime.now();
 
-        // 만약 날짜타입이 전체라면
-        if (StringUtils.equals("all", searchDateType)) { // "all".equals(searchDateType)
+        // 만약 날짜타입이 전체 혹은 비어있다면,
+        if (StringUtils.equals("all", searchDateType) 
+                || searchDateType == null) { // "all".equals(searchDateType)
             return null;        // null을 리턴하면 where조건을 생략한다.
             // 만약 날짜 타입이 하루면 => 하루 전으로 설정
         } else if (StringUtils.equals("1d", searchDateType)) {

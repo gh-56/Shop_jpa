@@ -30,38 +30,63 @@
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        <!-- 이전 -->
+        <li class="page-item">
+          <a
+            class="page-link"
+            th:href="@{/admin/items/{number}(number=${items.number-1})}"
+            >Previous</a
+          >
+        </li>
+
+        <!-- 페이지 수만큼 -->
+        <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}">
+          <a
+            class="page-link"
+            th:href="@{/admin/items/{number}(number=${page-1})}"
+            th:text="${page}"
+          ></a>
+        </li>
+
+        <!-- 다음 -->
+        <li class="page-item">
+          <a
+            class="page-link"
+            th:href="@{/admin/items/{number}(number=${items.number+1})}"
+            >Next</a
+          >
+        </li>
       </ul>
     </nav>
 
     <!-- 쿼리 (질의, 검색) -->
-    <div class="form-inline justify-content-center">
-      <select name="searchDateType" id="searchDateType">
-        <option value="all">전체기간</option>
-        <option value="1d">1일</option>
-        <option value="1w">1주</option>
-        <option value="1m">1달</option>
-        <option value="6m">6개월</option>
-      </select>
-      <select name="searchSellStatus" id="searchSellStatus">
-        <option value="">판매상태(전체)</option>
-        <option value="SELL">판매</option>
-        <option value="SOLD_OUT">품절</option>
-      </select>
-      <select name="searchBy" id="searchBy">
-        <option value="itemNm">상품명</option>
-        <option value="createdBy">등록자</option>
-      </select>
-      <input
-        type="text"
-        name="searchQuery"
-        placeholder="검색어를 입력해주세요."
-      />
-      <button id="serachBtn" class="btn btn-primary">검색</button>
-    </div>
+    <form th:action="@{'/admin/items/'+ ${items.number}}" method="get">
+      <div class="form-inline justify-content-center">
+        <select name="searchDateType" id="searchDateType">
+          <option value="all">전체기간</option>
+          <option value="1d">1일</option>
+          <option value="1w">1주</option>
+          <option value="1m">1달</option>
+          <option value="6m">6개월</option>
+        </select>
+        <select name="searchSellStatus" id="searchSellStatus">
+          <option value="">판매상태(전체)</option>
+          <option value="SELL">판매</option>
+          <option value="SOLD_OUT">품절</option>
+        </select>
+        <select name="searchBy" id="searchBy">
+          <option value="itemNm">상품명</option>
+          <option value="createdBy">등록자</option>
+        </select>
+        <input
+          type="text"
+          name="searchQuery"
+          placeholder="검색어를 입력해주세요."
+        />
+        <button id="serachBtn" type="submit" class="btn btn-primary">
+          검색
+        </button>
+      </div>
+    </form>
   </div>
 </html>

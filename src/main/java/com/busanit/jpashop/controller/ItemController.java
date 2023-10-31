@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -85,13 +86,35 @@ public class ItemController {
         return "redirect:/";
     }
 
-    @GetMapping("/admin/items")
-    public String itemManage(Model model, ItemSearchDto itemSearchDto) {
-        Pageable pageable = PageRequest.of(0, 3);
+    @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
+    public String itemManage(Model model, ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page) {
+        // page가 null일 경우 : 시작(0)부터, 존재할 경우 page번호로 보여준다.
+        Pageable pageable = PageRequest.of( page.isPresent() ? page.get() : 0, 3);
+
         // 서비스 계층에서 item 페이지 가져오기
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
 
         model.addAttribute("items", items);
+        model.addAttribute("itemSearchDto", itemSearchDto);
+
+        // 시작페이지, 마지막 페이지, 최대 페이지 구하기
+        int maxPage = 5;
+        int start = (items.getNumber() / maxPage) * maxPage + 1;
+        int end = 0;
+
+        if (items.getTotalPages() == 0) {
+            end = 1;
+        } else if (start+(maxPage-1) < items.getTotalPages()) {
+            end = start + maxPage - 1;
+        } else {
+            end = items.getTotalPages();
+        }
+
+        model.addAttribute("maxPage", maxPage);
+        model.addAttribute("start", start);
+        model.addAttribute("end", end);
+
+
         return "item/itemMng";
     }
 
