@@ -51,9 +51,4 @@ public class MemberController {
         model.addAttribute("loginErrorMsg", "아이디와 비밀번호를 확인해주세요");
         return "/member/memberLoginForm";
     }
-
-    @GetMapping("/")
-    public String main(){
-        return "main";
-    }
 }

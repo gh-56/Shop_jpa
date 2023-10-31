@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -41,6 +40,8 @@ public class SecurityConfig {
                 .requestMatchers(antMatcher("/")).permitAll()
                 .requestMatchers(antMatcher("/css/**")).permitAll()
                 .requestMatchers(antMatcher("/members/**")).permitAll()
+                .requestMatchers(antMatcher("/images/**")).permitAll() // 이미지 파일 모두 접근
+                .requestMatchers(antMatcher("/item/**")).permitAll()
                 .requestMatchers(antMatcher("/admin/**")) // **: 모든 경로
                 .hasAnyRole("ADMIN")
                 .anyRequest().authenticated()

@@ -2,6 +2,8 @@ package com.erser.jpashop.repository;
 
 import com.erser.jpashop.constant.ItemSellStatus;
 import com.erser.jpashop.dto.ItemSearchDto;
+import com.erser.jpashop.dto.MainItemDto;
+import com.erser.jpashop.dto.QMainItemDto;
 import com.erser.jpashop.entity.Item;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.erser.jpashop.entity.QItem.item;
+import static com.erser.jpashop.entity.QItemImg.itemImg;
 
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     private JPAQueryFactory queryFactory;
@@ -52,15 +55,15 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     private Predicate searchByLike(String searchBy, String searchQuery) {
         // 상품명 조회
         if (StringUtils.equals("itemNm", searchBy)) {
-            return item.itemNm.like("%"+searchQuery+"%");
-        } else if (StringUtils.equals("createdBy", searchBy)){
-            return item.createdBy.like("%"+searchQuery+"%");
+            return item.itemNm.like("%" + searchQuery + "%");
+        } else if (StringUtils.equals("createdBy", searchBy)) {
+            return item.createdBy.like("%" + searchQuery + "%");
         }
         return null;
     }
 
     private Predicate searchSellStatusEq(ItemSellStatus searchSellStatus) {
-        if (searchSellStatus == null){
+        if (searchSellStatus == null) {
             return null; // 판매상태 전체 => 조건절 없이
         } else {
             item.itemSellStatus.eq(searchSellStatus); // SELL, SOLD_OUT
@@ -71,7 +74,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     private Predicate regDateAfter(String searchDateType) {
         LocalDateTime dateTime = LocalDateTime.now();
         // 만약 날짜타입이 전체 혹은 비어있다면
-        if(StringUtils.equals("all", searchDateType) || searchDateType == null){
+        if (StringUtils.equals("all", searchDateType) || searchDateType == null) {
             return null;        // null을 리턴하면 where조건을 생략한다.
             // 만약 하루면
         } else if (StringUtils.equals("1d", searchDateType)) {
@@ -85,4 +88,49 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
         }
         return item.regTime.after(dateTime);
     }
+
+    @Override
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+
+//         QItemImg itemImg = QItemImg.itemImg;
+
+        // 필요한 컬럼 프로젝션
+        List<MainItemDto> content = queryFactory
+                .select(new QMainItemDto(
+                        item.id,
+                        item.itemNm,
+                        item.itemDetail,
+                        itemImg.imgUrl,
+                        item.price)
+                ).from(itemImg)
+                .join(itemImg.item, item)   // 테이블 조인 inner join
+                .where(itemImg.repImgYn.eq("Y")) // 대표 상품이미지만 선택해서 불러오기
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .orderBy(item.id.desc()) // 최신순 정렬
+                .offset(pageable.getOffset()) // 페이징
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        // 전체 쿼리 가져오기
+        // select count(*) from item;
+        Long total = queryFactory
+                .select(itemImg.count())
+                .from(itemImg)
+                .join(itemImg.item, item)   // 테이블 조인 inner join
+                .where(itemImg.repImgYn.eq("Y")) // 대표 상품이미지만 선택해서 불러오기
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .fetchOne();
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    // 검색어가 null인 경우 조건절 생략, 존재하는 경우 검색어가 포함되는 상품 조건 반
+    private Predicate itemNmLike(String searchQuery){
+        if(StringUtils.isEmpty(searchQuery)){
+            return null;
+        }else {
+            return item.itemNm.like("%"+searchQuery+"%");
+        }
+    }
+
 }

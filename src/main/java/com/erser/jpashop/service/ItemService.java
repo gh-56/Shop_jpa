@@ -3,6 +3,7 @@ package com.erser.jpashop.service;
 import com.erser.jpashop.dto.ItemFormDto;
 import com.erser.jpashop.dto.ItemImgDto;
 import com.erser.jpashop.dto.ItemSearchDto;
+import com.erser.jpashop.dto.MainItemDto;
 import com.erser.jpashop.entity.Item;
 import com.erser.jpashop.entity.ItemImg;
 import com.erser.jpashop.repository.ItemImgRepository;
@@ -87,5 +88,9 @@ public class ItemService {
 
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 }
