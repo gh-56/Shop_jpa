@@ -4,6 +4,35 @@
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layout/layout1}"
 >
+  <!-- 사용자 JS 조각-->
+  <th:block layout:fragment="script">
+    <script th:inline="javascript">
+      // 랜더링 DOM 요소 준비 마치면 실행
+      document.addEventListener('DOMContentLoaded', () => {
+        const searchBtn = document.getElementById('searchBtn');
+        searchBtn.addEventListener('click', (event) => {
+          // 폼 태그 기본 액션 막고, 질의어 첫 페이지로 이동
+          event.preventDefault;
+          linkPage(0);
+        });
+      });
+      // 쿼리 파라미터로 링크 요청
+      function linkPage(page) {
+        // 데이터 가져오기
+        const searchDateType = document.getElementById('searchDateType').value;
+        const searchSellStatus =
+          document.getElementById('searchSellStatus').value;
+        const searchBy = document.getElementById('searchBy').value;
+        const searchQuery = document.getElementById('searchQuery').value;
+
+        const path = '/admin/items';
+        const query = `?searchDateType=${searchDateType}&searchSellStatus=${searchSellStatus}&searchBy=${searchBy}&searchQuery=${searchQuery}`;
+
+        // 링크로 이동하기
+        location.href = path + page + query;
+      }
+    </script>
+  </th:block>
   <div layout:fragment="content">
     <!-- 데이터 -->
     <table class="table">
@@ -34,16 +63,21 @@
         <li class="page-item">
           <a
             class="page-link"
-            th:href="@{/admin/items/{number}(number=${items.number-1})}"
+            th:unless="${items.first}"
+            th:onclick="'linkPage(' + ${items.number-1} + ')'"
             >Previous</a
           >
         </li>
 
         <!-- 페이지 수만큼 -->
-        <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}">
+        <li
+          class="page-item"
+          th:each="page : ${#numbers.sequence(start, end)}"
+          th:classappend="${items.number == page-1} ? 'active' : ''"
+        >
           <a
             class="page-link"
-            th:href="@{/admin/items/{number}(number=${page-1})}"
+            th:onclick="'linkPage(' + ${page-1} + ')'"
             th:text="${page}"
           ></a>
         </li>
@@ -52,33 +86,46 @@
         <li class="page-item">
           <a
             class="page-link"
-            th:href="@{/admin/items/{number}(number=${items.number+1})}"
+            th:onclick="'linkPage(' + ${items.number+1} + ')'"
             >Next</a
           >
         </li>
       </ul>
     </nav>
     <!-- 쿼리 (질의, 검색)-->
-    <form th:action="@{'/admin/items/' + ${items.number}}" method="get">
+    <form
+      th:action="@{'/admin/items/' + ${items.number}}"
+      th:object="${itemSearchDto}"
+      method="get"
+    >
       <div class="form-inline justify-content-center">
-        <select name="searchDateType" id="searchDateType">
+        <select
+          name="searchDateType"
+          id="searchDateType"
+          th:field="*{searchDateType}"
+        >
           <option value="all">전체기간</option>
           <option value="1d">1일</option>
           <option value="1w">1주</option>
           <option value="1m">1달</option>
           <option value="6m">6개월</option>
         </select>
-        <select name="searchSellStatus" id="searchSellStatus">
+        <select
+          name="searchSellStatus"
+          id="searchSellStatus"
+          th:field="*{searchSellStatus}"
+        >
           <option value="">판매상태(전체)</option>
           <option value="SELL">판매</option>
           <option value="SOLD_OUT">품절</option>
         </select>
-        <select name="searchBy" id="searchBy">
+        <select name="searchBy" id="searchBy" th:field="*{searchBy}">
           <option value="itemNm">상품명</option>
           <option value="createdBy">등록자</option>
         </select>
         <input
           type="text"
+          th:field="*{searchQuery}"
           name="searchQuery"
           placeholder="검색어를 입력해주세요"
         />

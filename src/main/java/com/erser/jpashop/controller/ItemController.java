@@ -91,7 +91,7 @@ public class ItemController {
         return "redirect:/";
     }
 
-    @GetMapping(value = {"/admin/items", "/admin/items/{pages}"})
+    @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
     public String itemManage(Model model, ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page){
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
         // 서비스 계층에서 item 가져오기
