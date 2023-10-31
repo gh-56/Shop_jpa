@@ -74,16 +74,23 @@
   - #{...} : 메세지 표현식
   - @{...} : 링크 URL 표현식
   - ~{...} : 조각(fragment) 표현식
+  - [[...]] : 데이터를 직접 출력
 - XML 네임스페이스 사용
   - `<html xmlns:th="http://www.thymeleaf.org"`
   - th:text 
   - th:utext : 특수문자 등 태그를 입력하고 싶을 때(이스케이프 문자)
   - th:each : 반복문
+    - `<div th:each="item, status : ${items"}>`
   - th:if : 조건문
+    - th:unless : else에 해당
   - th:object : 폼 태그에서 스프링과 바인딩될 도메인 객체
   - th:field : 인풋 태그에서 스프링과 바인딩된 객체의 입력 필드
     - id, name, value 속성의 설정이 간편하게 진행됨.
   - 리터럴 대체 : "|hello ${user.name}|"
+- 유틸리티 객체
+  - #strings : 문자열 관련 편의 기능 제공
+  - #lists : 리스트 관련 편의기능 제공
+  - [타임리프 공식문서 유틸리티 오브젝트](https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#appendix-b-expression-utility-objects)
 
 # Spring Security
 - 인증 Authentication
@@ -207,8 +214,32 @@
   - 업로드 하는 파일은 별도의 저장공간에 관리 (업로드 경로 지정)
   - DB에는 바이너리 파일이 저장되는 것이 아니라, 해당 경로가 저장이 된다.
 
+# modelmapper 라이브러리
+- org.modelmapper:modelmapper
+- 서로 다른 클래스의 값을 필드의 이름과 자료형이 같으면 getter, setter를 통해 값을 복사해서 객체 반환
+- modelMapper.map( 타입1(source), 타입2(destination) )
+
+# Validation
+- 스프링 유효성 검증 의존성 추가 
+- implementation 'org.springframework.boot:spring-boot-starter-validation'
+- 유효성 체크, 비어있는지 체크
+  - @NotEmpty    @NotBlank         @NotNull
+  - (null, 길이0) (null, 길이0, '') (null)
+- @Email : 이메일 형식인지 체크
+- @Length : 길이 체크(최소, 최대)
+- message : 유효성 검증을 통과하지 못했을 때 에러 메시지 전달
+- 컨트롤러에서
+  - @Valid  : 유효성 검증을 할 파라미터 앞에 붙임
+  - BindingResult : 유효성 검사 결과를 담아줌.
+    - bindingResult.hasErrors() : 에러가 있는 경우 true
+      - 타임리프 통합 ${#files.hasError('필드명')}, th:errors 등을 통해 에러 메시지 전달
+
+# 변경 감지(Change Detection)
+- 영속성 컨텍스트(Persistence Context)를 통해 관리되는 엔티티가 변경되면 JPA가 해당 변경을 감지하여 트랜잭션이 커밋될 때, 데이터베이스와 변경을 동기화하는 작업을 수행.
+- 
 # Pageable
-- 스프링 프레임워크, Spring Data JPA 에서 페이징 관련 인터페이스
+- 스프링 프레임워크, Spring Data JPA 에서 페이징 관련 인터페이스 
 - 데이터베이스에서 결과를 페이지로 나눠 가져오는데 사용
   - PageReqeust.of(페이지 번호, 항목당 페이지 수, [정렬])
-
+  - 페이지 번호, 크기 정보, 정렬 정보 등을 포함
+  - 페이징 된 결과로 Page<T> 객체가 반환

@@ -79,7 +79,6 @@ public class ItemController {
         if (bindingResult.hasErrors()) {
             return "/item/itemForm";
         }
-
         // 서비스 계층에 수정 비즈니스 로직 위임
         itemService.updateItem(itemFormDto, itemImgFileList);
         
@@ -91,7 +90,6 @@ public class ItemController {
         Pageable pageable = PageRequest.of(0, 3);
         // 서비스 계층에서 item 페이지 가져오기
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
-
 
         model.addAttribute("items", items);
         return "item/itemMng";
