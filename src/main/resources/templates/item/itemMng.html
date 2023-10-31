@@ -48,7 +48,12 @@
       <tbody>
         <tr th:each="item, status: ${items}">
           <td th:text="${item.id}"></td>
-          <td th:text="${item.itemNm}"></td>
+          <td th:text="${item.itemNm}">
+            <a
+              th:href="@{/admin/item/{itemId}(itemId=${item.id})}"
+              th:text="${item.itemNm}"
+            ></a>
+          </td>
           <td th:text="${item.itemSellStatus}"></td>
           <td th:text="${item.createdBy}"></td>
           <td th:text="${item.regTime}"></td>
