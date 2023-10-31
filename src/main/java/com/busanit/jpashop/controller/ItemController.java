@@ -94,6 +94,7 @@ public class ItemController {
         // 서비스 계층에서 item 페이지 가져오기
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
 
+
         model.addAttribute("items", items);
         model.addAttribute("itemSearchDto", itemSearchDto);
 

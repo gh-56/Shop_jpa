@@ -34,13 +34,18 @@
         <li class="page-item">
           <a
             class="page-link"
+            th:unless="${items.first}"
             th:href="@{/admin/items/{number}(number=${items.number-1})}"
             >Previous</a
           >
         </li>
 
         <!-- 페이지 수만큼 -->
-        <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}">
+        <li
+          class="page-item"
+          th:each="page : ${#numbers.sequence(start, end)}"
+          th:classappend="${items.number == page-1} ? 'active' : '' "
+        >
           <a
             class="page-link"
             th:href="@{/admin/items/{number}(number=${page-1})}"
@@ -52,6 +57,7 @@
         <li class="page-item">
           <a
             class="page-link"
+            th:unless="${items.last}"
             th:href="@{/admin/items/{number}(number=${items.number+1})}"
             >Next</a
           >
