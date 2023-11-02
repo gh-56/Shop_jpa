@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -21,8 +22,8 @@ public class MainController {
 
     private final ItemService itemService;
 
-    @GetMapping(value = {"/", "/{page}"})
-    public String main(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
+    @GetMapping(value = {"/"})
+    public String main(ItemSearchDto itemSearchDto, @RequestParam Optional<Integer> page, Model model) {
 
         Pageable pageable = PageRequest.of(page.isPresent()
                         ? page.get()

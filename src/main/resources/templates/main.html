@@ -117,7 +117,7 @@
           <a
             class="page-link"
             th:unless="${items.first}"
-            th:href="@{/{number}(number=${items.number - 1})}"
+            th:href="@{/?page={number}&searchQuery={query}(number=${items.number - 1}, query=${itemSearchDto.searchQuery})}"
             >Previous</a
           >
         </li>
@@ -130,7 +130,7 @@
         >
           <a
             class="page-link"
-            th:href="@{/{number}(number=${page-1})}"
+            th:href="@{/?page={number}&searchQuery={query}(number=${page-1}, query=${itemSearchDto.searchQuery})}"
             th:text="${page}"
           ></a>
         </li>
@@ -140,7 +140,7 @@
           <a
             class="page-link"
             th:unless="${items.last}"
-            th:href="@{/{number}(number=${items.number+1})}"
+            th:href="@{/?page={number}&searchQuery={query}(number=${items.number + 1}, query=${itemSearchDto.searchQuery})}"
             >Next</a
           >
         </li>

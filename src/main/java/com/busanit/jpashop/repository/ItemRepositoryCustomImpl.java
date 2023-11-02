@@ -104,6 +104,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     }
 
 
+    // 메인 페이지 쿼리 수행
     @Override
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
 
@@ -121,7 +122,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .from(itemImg)
                 .join(itemImg.item, item)       // 테이블 조인 inner join
                 .where(itemImg.repImgYn.eq("Y")) // 대표 상품이미지만 선택해서 불러오기
-                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))  // searchQuery : null일 경우 생략
                 .orderBy(item.id.desc())  // 최신순 정렬
                 .offset(pageable.getOffset())   // 페이징
                 .limit(pageable.getPageSize())

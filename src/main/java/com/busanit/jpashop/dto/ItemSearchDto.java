@@ -9,6 +9,6 @@ public class ItemSearchDto {
     private String searchDateType;
     private ItemSellStatus searchSellStatus;
     private String searchBy;
-    private String searchQuery; // = "";
+    private String searchQuery =""; // = ""; null 문제 발생시 초기화
 
 }
