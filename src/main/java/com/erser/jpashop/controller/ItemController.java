@@ -57,10 +57,10 @@ public class ItemController {
     }
 
     @GetMapping("/admin/item/{itemId}")
-    public String itemDtl(@PathVariable("itemId") Long itemId, Model model) {
+    public String adminItemDtl(@PathVariable("itemId") Long itemId, Model model) {
         try {
             // 아이템 서비스에 위임하여 dto 리턴
-            ItemFormDto itemFormDto = itemService.getItemDto(itemId);
+            ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
             // 엔티티가 존재할 경우 dto를 모델에 담아 뷰로 전달
             model.addAttribute("itemFormDto", itemFormDto);
             // 경로변수(itemId)에 해당하는 엔티티가 없을 경우
@@ -117,6 +117,14 @@ public class ItemController {
         model.addAttribute("start", start);
         model.addAttribute("end", end);
         return "item/itemMng";
+    }
+
+    // 상세 페이지
+    @GetMapping(value = "/item/{itemId}")
+    public String itemDtl(@PathVariable Long itemId, Model model) {
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        model.addAttribute("item", itemFormDto);
+        return "item/itemDtl";
     }
 
 }

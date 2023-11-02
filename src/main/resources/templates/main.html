@@ -94,17 +94,16 @@
     </div>
     <!-- 페이지네이션 -->
     <nav
-      th:with="start = ${(items.getNumber() / maxPage) * maxPage + 1},
-    end = ${(items.getTotalPages() == 0) ? 1 : (start+(maxPage-1) < items.getTotalPages()) ? (start + maxPage - 1) : items.getTotalPages() }"
-      aria-label="Page navigation example"
+      th:with="start = ${ (items.getNumber() / maxPage) * maxPage + 1 }, end = ${ (items.getTotalPages() == 0) ?  1 : (start+(maxPage-1) < items.getTotalPages()) ? (start + maxPage - 1) : items.getTotalPages() }"
     >
+    <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
         <!-- 이전 -->
         <li class="page-item">
           <a
             class="page-link"
             th:unless="${items.first}"
-            th:href="@{/?page={number}&searchQuery={query}(number=${items.number-1}, query=${itemSearchDto.searchQuery})}"
+            th:href="@{/?page={number}&searchQuery={query}(number=${items.number - 1}, query=${itemSearchDto.searchQuery})}"
             >Previous</a
           >
         </li>
@@ -113,7 +112,7 @@
         <li
           class="page-item"
           th:each="page : ${#numbers.sequence(start, end)}"
-          th:classappend="${items.number == page-1} ? 'active' : ''"
+          th:classappend="${items.number == page-1} ? 'active' : '' "
         >
           <a
             class="page-link"
@@ -126,7 +125,8 @@
         <li class="page-item">
           <a
             class="page-link"
-            th:href="@{/?page={number}&searchQuery={query}(number=${items.number+1}, query=${itemSearchDto.searchQuery})}"
+            th:unless="${items.last}"
+            th:href="@{/?page={number}&searchQuery={query}(number=${items.number + 1}, query=${itemSearchDto.searchQuery})}"
             >Next</a
           >
         </li>

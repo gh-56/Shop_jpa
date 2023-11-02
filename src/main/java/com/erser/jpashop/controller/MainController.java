@@ -35,7 +35,7 @@ public class MainController {
         int maxPage = 5;
         // thymeleaf로 페이지 로직 이전
 //        start = ${(items.getNumber() / maxPage) * maxPage + 1},
-//        end = ${(items.getTotalPages() == 0) ? 1 : } : (start+(maxPage-1) < items.getTotalPages()) ? (start + maxPage - 1) : items.getTotalPages() }
+//        end = ${(items.getTotalPages() == 0) ? 1 : (start+(maxPage-1) < items.getTotalPages()) ? (start + maxPage - 1) : items.getTotalPages() }
         /*
         int start = (items.getNumber() / maxPage) * maxPage + 1;
         int end = 0;

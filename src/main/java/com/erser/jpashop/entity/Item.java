@@ -2,6 +2,7 @@ package com.erser.jpashop.entity;
 
 import com.erser.jpashop.constant.ItemSellStatus;
 import com.erser.jpashop.dto.ItemFormDto;
+import com.erser.jpashop.exception.OutOfStockException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,16 @@ public class Item extends BaseEntity{
         this.stockNumber = itemFormDto.getStockNumber();
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemSellStatus = itemFormDto.getItemSellStatus();
+    }
+
+    public void removeStock(int count) {
+        int rest = this.stockNumber - count;
+        // 개수 부족시 예외 발생
+        if (rest < 0){
+            throw new OutOfStockException("상품의 재고가 부족합니다.");
+        }
+
+        this.stockNumber = rest;
     }
 
     // Auditing 추가 했기 때문에 주석 처리함

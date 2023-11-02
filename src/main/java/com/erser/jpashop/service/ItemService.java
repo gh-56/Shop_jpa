@@ -46,7 +46,7 @@ public class ItemService {
         return item.getId();
     }
 
-    public ItemFormDto getItemDto(Long itemId) {
+    public ItemFormDto getItemDtl(Long itemId) {
         // 아이템 불러오기
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
         // 엔티티 -> dto
