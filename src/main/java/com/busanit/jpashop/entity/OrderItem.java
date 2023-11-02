@@ -37,6 +37,20 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    public static OrderItem createOrderItem(Item item, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setCount(count);
+        orderItem.setOrderPrice(item.getPrice());
+
+        // 상품 엔티티에서 재고를 감소 (개수만큼)
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    public int getTotalPrice() {
+        return orderPrice * count;
+    }
 }
 
 

@@ -46,6 +46,33 @@ public class Order extends BaseEntity {
             fetch = FetchType.LAZY
     )
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    // 새로운 주문 생성
+    public static Order createOrder(Member member, List<OrderItem> orderItemList) {
+        Order order = new Order();
+        order.setMember(member);        // 회원 세팅
+        for (OrderItem orderItem : orderItemList) {     // 주문상품 목록 세팅
+            order.addOrderItem(orderItem);
+        }
+        order.setOrderStatus(OrderStatus.ORDER);        // 주문상태 ORDER 세팅
+        order.setOrderDate(LocalDateTime.now());        // 주문시간 세팅
+        return order;
+    }
+
+    // 주문 상품 정보를 담아줌
+    private void addOrderItem(OrderItem orderItem) {
+        // 양방향 참조 관계
+        this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
     // 일대다 : 하나의 주문이 여러개의 주문 상품을 가지므로 List 자료형으로 매핑
 }
 

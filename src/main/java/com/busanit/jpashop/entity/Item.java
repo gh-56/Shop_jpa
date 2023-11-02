@@ -2,13 +2,11 @@ package com.busanit.jpashop.entity;
 
 import com.busanit.jpashop.constant.ItemSellStatus;
 import com.busanit.jpashop.dto.ItemFormDto;
+import com.busanit.jpashop.exception.OutOfStockException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Table(name="item")     // 테이블을 다른 이름 설정 가능
 @Entity
@@ -42,6 +40,16 @@ public class Item extends BaseEntity {
         this.stockNumber = itemFormDto.getStockNumber();
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemSellStatus = itemFormDto.getItemSellStatus();
+    }
+
+    public void removeStock(int count) {
+        int rest = this.stockNumber - count;
+        // 개수 부족시 예외발생
+        if (rest < 0) {
+            throw new OutOfStockException("상품의 재고가 부족합니다.");
+        }
+        this.stockNumber = rest;
+
     }
 
     // Auditing 추가로 삭제
