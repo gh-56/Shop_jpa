@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -20,8 +20,8 @@ public class MainController {
 
     private final ItemService itemService;
 
-    @GetMapping(value = {"/", "/{page}"})
-    public String main(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
+    @GetMapping(value = {"/"})
+    public String main(ItemSearchDto itemSearchDto, @RequestParam Optional<Integer> page, Model model) {
 
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
 
@@ -33,6 +33,10 @@ public class MainController {
 
         // 시작페이지, 마지막 페이지, 최대 페이지 구하기
         int maxPage = 5;
+        // thymeleaf로 페이지 로직 이전
+//        start = ${(items.getNumber() / maxPage) * maxPage + 1},
+//        end = ${(items.getTotalPages() == 0) ? 1 : } : (start+(maxPage-1) < items.getTotalPages()) ? (start + maxPage - 1) : items.getTotalPages() }
+        /*
         int start = (items.getNumber() / maxPage) * maxPage + 1;
         int end = 0;
 
@@ -43,10 +47,10 @@ public class MainController {
         } else {
             end = items.getTotalPages();
         }
-
+*/
         model.addAttribute("maxPage", maxPage);
-        model.addAttribute("start", start);
-        model.addAttribute("end", end);
+        /*model.addAttribute("start", start);
+        model.addAttribute("end", end);*/
 
         return "main";
 

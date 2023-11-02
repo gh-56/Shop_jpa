@@ -9,5 +9,5 @@ public class ItemSearchDto {
     private String searchDateType;
     private ItemSellStatus searchSellStatus;
     private String searchBy;
-    private String searchQuery;
+    private String searchQuery = "";
 }
