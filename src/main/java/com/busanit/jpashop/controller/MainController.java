@@ -39,20 +39,23 @@ public class MainController {
 
         // 시작페이지, 마지막 페이지, 최대 페이지 구하기
         int maxPage = 5;
-        int start = (items.getNumber() / maxPage) * maxPage + 1;
-        int end = 0;
-
-        if (items.getTotalPages() == 0) {
-            end = 1;
-        } else if (start+(maxPage-1) < items.getTotalPages()) {
-            end = start + maxPage - 1;
-        } else {
-            end = items.getTotalPages();
-        }
+        // thymeleaf로 페이지 로직 이전
+        // start = ${ (items.getNumber() / maxPage) * maxPage + 1 },
+        // end = ${ (items.getTotalPages() == 0) ?  1 : (start+(maxPage-1) < items.getTotalPages()) ? (start + maxPage - 1) : items.getTotalPages() }
+//        int start = (items.getNumber() / maxPage) * maxPage + 1;
+//        int end = 0;
+//
+//        if (items.getTotalPages() == 0) {
+//            end = 1;
+//        } else if (start+(maxPage-1) < items.getTotalPages()) {
+//            end = start + maxPage - 1;
+//        } else {
+//            end = items.getTotalPages();
+//        }
 
         model.addAttribute("maxPage", maxPage);
-        model.addAttribute("start", start);
-        model.addAttribute("end", end);
+//        model.addAttribute("start", start);
+//        model.addAttribute("end", end);
 
 
         return "main";

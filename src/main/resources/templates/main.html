@@ -110,7 +110,9 @@
     </div>
 
     <!-- 페이지네이션 -->
-    <nav aria-label="Page navigation example">
+    <nav
+      th:with="start = ${ (items.getNumber() / maxPage) * maxPage + 1 }, end = ${ (items.getTotalPages() == 0) ?  1 : (start+(maxPage-1) < items.getTotalPages()) ? (start + maxPage - 1) : items.getTotalPages() }"
+    >
       <ul class="pagination justify-content-center">
         <!-- 이전 -->
         <li class="page-item">
