@@ -39,6 +39,8 @@ public class OrderService {
         // 주문 생성
         Order order = Order.createOrder(member, orderItemList);
 
+        orderRepository.save(order);
+
         return order.getId();
     }
 }

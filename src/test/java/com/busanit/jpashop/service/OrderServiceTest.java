@@ -40,22 +40,23 @@ class OrderServiceTest {
         item.setItemDetail("상품상세");
         item.setItemSellStatus(ItemSellStatus.SELL);
         item.setStockNumber(100);
-        itemRepository.save(item);
+        Item savedItem = itemRepository.save(item);
 
         // for OrderDto
         OrderDto orderDto = new OrderDto();
-        orderDto.setItemId(item.getId());
+        orderDto.setItemId(savedItem.getId());
         orderDto.setCount(10);
 
         // for email
         Member member = new Member();
         member.setEmail("test@test.com");
-        memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
 
-        String email = member.getEmail();
+        String email = savedMember.getEmail();
 
         // when
         Long orderId = orderService.order(orderDto, email);
+
 
         // then
         Order order = orderRepository.findById(orderId).orElse(null);
