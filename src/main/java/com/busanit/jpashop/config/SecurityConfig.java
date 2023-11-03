@@ -1,15 +1,22 @@
 package com.busanit.jpashop.config;
 
 import com.busanit.jpashop.service.MemberService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.io.IOException;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -65,6 +72,17 @@ public class SecurityConfig {
                         // 그 외 모든 요청은 인증되어야 한다.
                         .anyRequest().authenticated()
                 );
+
+        // 인증되지 않은 사용자가 들어왔을 때 예외처리
+        // => 로그인 페이지 리다이렉트(302)
+        // => 상태코드 UNAUTORIZED 401
+        http.exceptionHandling( exception ->
+                exception.authenticationEntryPoint(new AuthenticationEntryPoint() {
+                    @Override
+                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                    }
+                }));
 
 
 
