@@ -50,4 +50,12 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.OK).body(cartItemId);
     }
 
+    // READ : 장바구니 페이지
+
+    // UPDATE : 장바구니 수량 변경
+
+    // DELETE : 장바구니에서 제거
+
+    // CREATE ALL : 장바구니에 담긴 상품 한꺼번에 주문
+
 }
