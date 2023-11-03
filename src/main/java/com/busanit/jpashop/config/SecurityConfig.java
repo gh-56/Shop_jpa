@@ -74,7 +74,6 @@ public class SecurityConfig {
                 );
 
         // 인증되지 않은 사용자가 들어왔을 때 예외처리
-        // => 로그인 페이지 리다이렉트(302)
         // => 상태코드 UNAUTORIZED 401
         http.exceptionHandling( exception ->
                 exception.authenticationEntryPoint(new AuthenticationEntryPoint() {

@@ -1,15 +1,18 @@
 package com.busanit.jpashop.service;
 
 import com.busanit.jpashop.dto.OrderDto;
-import com.busanit.jpashop.entity.Item;
-import com.busanit.jpashop.entity.Member;
-import com.busanit.jpashop.entity.Order;
-import com.busanit.jpashop.entity.OrderItem;
+import com.busanit.jpashop.dto.OrderHistDto;
+import com.busanit.jpashop.dto.OrderItemDto;
+import com.busanit.jpashop.entity.*;
+import com.busanit.jpashop.repository.ItemImgRepository;
 import com.busanit.jpashop.repository.ItemRepository;
 import com.busanit.jpashop.repository.MemberRepository;
 import com.busanit.jpashop.repository.OrderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
+    private final ItemImgRepository itemImgRepository;
 
     public Long order(OrderDto orderDto, String email) {
         // 상품 정보 가져오기
@@ -42,5 +46,31 @@ public class OrderService {
         orderRepository.save(order);
 
         return order.getId();
+    }
+
+    @Transactional(readOnly = true)     // 읽기 전용 트랜잭션 성능 최적화
+    public Page<OrderHistDto> getOrderList(String email, Pageable pageable) {
+
+        // 1. 유저 id(email)을 이용하여, 주문 목록을 조회
+        List<Order> orders = orderRepository.findOrder(email, pageable);
+        // 2. 총 개수 조회
+        Long totalCount = orderRepository.countOrder(email);
+        // 3. 주문 리스트 순회하면서 뷰페이지 전달할 DTO 생성 : 주문Dto 목록
+        List<OrderHistDto> orderHistDtoList = new ArrayList<>();
+        for (Order order : orders) {
+            OrderHistDto orderHistDto = new OrderHistDto(order);
+            List<OrderItem> orderItems = order.getOrderItems();
+            // 순회하면서 주문아이템DTO
+            for (OrderItem orderItem : orderItems) {
+                // 4. 상품 대표 이미지 조회
+                ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), "Y");
+                OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
+                orderHistDto.addOrderItemDto(orderItemDto);
+            }
+            orderHistDtoList.add(orderHistDto);
+        }
+
+        // 5. 페이지 객체 리턴
+        return new PageImpl<>(orderHistDtoList, pageable, totalCount);
     }
 }
